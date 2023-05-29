@@ -1,0 +1,45 @@
+<div *ngIf="!dataLoaded" class="spinner-border text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+<input
+  class="form-control me-2"
+  type="search"
+  placeholder="Search"
+  aria-label="Search"
+  [(ngModel)]="filterText"
+/>
+<div *ngIf="filterText.length > 2">
+  <p>
+    <b>{{ filterText }} </b> aradınız.
+  </p>
+</div>
+<table class="table" *ngIf="dataLoaded">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Category Id</th>
+      <th scope="col">Units In Stock</th>
+      <th scope="col">Price</th>
+      <th scope="col">Vat Price</th>
+      <th scope="col">Sepet</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of products | filterProducts : filterText">
+      <th scope="row">{{ item.productId }}</th>
+      <td>{{ item.productName }}</td>
+      <td>{{ item.categoryId }}</td>
+      <td>{{ item.unitsInStock }}</td>
+      <td>{{ item.unitPrice }}</td>
+      <td>
+        {{
+          item.unitPrice
+            | vatAdded : item.unitPrice
+            | currency : "TRY" : "TL " : ""
+        }}
+      </td>
+      <td><button (click)="addTocCart(item)" class="btn btn-outline-success">Sepete Ekle</button></td>
+    </tr>
+  </tbody>
+</table>
